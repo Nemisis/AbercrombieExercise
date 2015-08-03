@@ -3,15 +3,18 @@ package com.ariets.abercrombie.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 
 import com.ariets.abercrombie.R;
 
 import butterknife.ButterKnife;
 
 /**
+ * The activity that displays the list of promotions. This is done via {@link AfPromotionsFragment}.
+ * <p/>
  * Created by aaron on 8/1/15.
  */
-public class AfPromotionsActivity extends AfBaseActivity {
+public class AfPromotionsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

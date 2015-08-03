@@ -3,4 +3,9 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="promotions_api_error">An error occurred fetching the promotions.</string>
+    <string name="promotions_empty_state_no_network">No network! You must be connected to a network in order to
+    receive your promotions!</string>
+    <string name="promotions_empty_state_none">There are no promotions available! </string>
 </resources>

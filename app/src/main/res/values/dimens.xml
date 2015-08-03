@@ -9,5 +9,6 @@
     <dimen name="detail_image_size">250dp</dimen>
     <dimen name="detail_container_padding">16dp</dimen>
     <dimen name="detail_item_padding">16dp</dimen>
+    <dimen name="promotion_empty_state_padding_horizontal">32dp</dimen>
 
 </resources>

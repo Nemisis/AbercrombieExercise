@@ -14,16 +14,17 @@ import retrofit.client.OkClient;
 import rx.Observable;
 
 /**
+ * The "API Client" to interact with the API.
+ * <p/>
  * Created by aaron on 7/31/15.
  */
-public class AbercrombieApiClient {
+public class PromotionsApiClient {
 
     private static final String API_ENDPOINT = "http://www.abercrombie.com/anf/nativeapp";
 
-    private RestAdapter mRestAdapter;
-    private AbercrombieApiService mApiService;
+    private PromotionsApiService mApiService;
 
-    public AbercrombieApiClient(Context context) {
+    public PromotionsApiClient(Context context) {
 
         RestAdapter.Builder restBuilder = new RestAdapter.Builder()
                 .setEndpoint(API_ENDPOINT)
@@ -37,9 +38,7 @@ public class AbercrombieApiClient {
             restBuilder.setClient(new OkClient(client));
         }
 
-        mRestAdapter = restBuilder.build();
-
-        mApiService = mRestAdapter.create(AbercrombieApiService.class);
+        mApiService = restBuilder.build().create(PromotionsApiService.class);
     }
 
     public Observable<ArrayList<AfPromotion>> getPromotions() {

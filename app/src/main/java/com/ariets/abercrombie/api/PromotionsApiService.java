@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import retrofit.http.GET;
 import rx.Observable;
 
-public interface AbercrombieApiService {
+public interface PromotionsApiService {
 
+    /**
+     * Retrieves a list of Promotions from the API.
+     */
     @GET("/Feeds/promotions.json")
     Observable<ArrayList<AfPromotion>> getPromotions();
 

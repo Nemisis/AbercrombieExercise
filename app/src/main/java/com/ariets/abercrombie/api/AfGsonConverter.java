@@ -24,6 +24,10 @@ import retrofit.mime.MimeUtil;
 import retrofit.mime.TypedInput;
 import retrofit.mime.TypedOutput;
 
+/**
+ * Custom GSON converter used with converting the API response to a list of {@link AfPromotion}'s. This will also
+ * store the JSON response in SharedPreference's via {@link PreferenceUtils#setJsonData(Context, String)}.
+ */
 public class AfGsonConverter implements Converter {
     private final Gson gson;
     private final String charset;
@@ -37,11 +41,18 @@ public class AfGsonConverter implements Converter {
                 .create();
     }
 
+    /**
+     * Returns the {@link Type} to be used with GSON in order to serialize the JSON into an ArrayList of
+     * {@link AfPromotion}'s.
+     */
     public static Type getType() {
         return new TypeToken<ArrayList<AfPromotion>>() {
         }.getType();
     }
 
+    /**
+     * Returns the {@link com.ariets.abercrombie.model.AfPromotion.Deserializer}.
+     */
     public static JsonDeserializer getPromotionDeserializer() {
         return new AfPromotion.Deserializer();
     }
@@ -72,6 +83,9 @@ public class AfGsonConverter implements Converter {
         }
     }
 
+    /**
+     * Converts the given InputStreamReader to a String and saves it to the SharedPreferences.
+     */
     private String convertToStringForSavingInPreferences(InputStreamReader isr) throws IOException {
         BufferedReader r = new BufferedReader(isr);
         StringBuilder total = new StringBuilder();

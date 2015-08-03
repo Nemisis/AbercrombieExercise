@@ -23,6 +23,8 @@ import nl.qbusict.cupboard.annotation.Ignore;
 import timber.log.Timber;
 
 /**
+ * Represents a Promotion from the API.
+ * <p/>
  * Created by aaron on 7/31/15.
  */
 public class AfPromotion implements Parcelable {
@@ -164,6 +166,10 @@ public class AfPromotion implements Parcelable {
         dest.writeString(title);
     }
 
+    /**
+     * Custom deserializer. This is required due to the JSON returning either a JSON Array or a JSON Object for the
+     * "button" representation.
+     */
     public static class Deserializer implements JsonDeserializer<ArrayList<AfPromotion>> {
         private ArrayList<AfPromotion> promotions;
 

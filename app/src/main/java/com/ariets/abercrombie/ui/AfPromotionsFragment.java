@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,9 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ariets.abercrombie.R;
+import com.ariets.abercrombie.api.ApiError;
 import com.ariets.abercrombie.model.AfPromotion;
 import com.ariets.abercrombie.presenters.PromotionsPresenter;
 import com.ariets.abercrombie.views.DividerItemDecoration;
@@ -39,6 +43,12 @@ public class AfPromotionsFragment extends AfBaseFragment implements IPromotionsV
     Toolbar mToolbar;
     @Bind(R.id.promotions_recycler)
     RecyclerView mRecyclerView;
+    @Bind(R.id.promotions_empty_container)
+    LinearLayout mEmptyContainer;
+    @Bind(R.id.promotions_empty_image)
+    ImageView mEmptyImage;
+    @Bind(R.id.promotions_empty_tv)
+    TextView mEmptyTv;
 
     private PromotionsPresenter mPresenter;
     private PromotionsAdapter mAdapter;
@@ -92,17 +102,40 @@ public class AfPromotionsFragment extends AfBaseFragment implements IPromotionsV
         Timber.d("");
     }
 
+    private void invalidateEmptyState(@StringRes int emptyStateText) {
+        boolean showEmptyState = mAdapter.getItemCount() == 0;
+        mRecyclerView.setVisibility(showEmptyState ? View.GONE : View.VISIBLE);
+        mEmptyContainer.setVisibility(showEmptyState ? View.VISIBLE : View.GONE);
+        mEmptyTv.setText(emptyStateText);
+    }
+
     @Override
-    public void displayPromotions(@Nullable ArrayList<AfPromotion> promotions) {
-        mAdapter.clear();
-        for (int i = 0, size = promotions.size(); i < size; i++) {
-            mAdapter.addItem(promotions.get(i));
+    public void displayPromotions(@NonNull ArrayList<AfPromotion> promotions) {
+        if (promotions.size() == 0 && mAdapter.getItemCount() == 0) {
+            // Show empty state.
+            invalidateEmptyState(R.string.promotions_empty_state_none);
+        } else {
+            mAdapter.clear();
+            for (int i = 0, size = promotions.size(); i < size; i++) {
+                mAdapter.addItem(promotions.get(i));
+            }
+            invalidateEmptyState(R.string.promotions_empty_state_none);
         }
     }
 
     @Override
-    public void onPromotionsError() {
-        Timber.d("");
+    public void onPromotionsError(ApiError apiError) {
+        switch (apiError.getErrorType()) {
+            case ApiError.ERROR_TYPE_NO_NETWORK:
+                invalidateEmptyState(R.string.promotions_empty_state_no_network);
+                break;
+            case ApiError.ERROR_TYPE_API_ERROR:
+                View v = getView();
+                if (v != null) {
+                    Snackbar.make(getView(), R.string.promotions_api_error, Snackbar.LENGTH_SHORT).show();
+                }
+                break;
+        }
     }
 
     @Override

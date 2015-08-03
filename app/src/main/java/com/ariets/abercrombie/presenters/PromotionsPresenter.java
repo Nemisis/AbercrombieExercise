@@ -1,16 +1,13 @@
 package com.ariets.abercrombie.presenters;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 
 import com.ariets.abercrombie.PreferenceUtils;
-import com.ariets.abercrombie.api.AbercrombieApiClient;
 import com.ariets.abercrombie.api.AfGsonConverter;
-import com.ariets.abercrombie.db.AfDatabaseHandler;
+import com.ariets.abercrombie.api.ApiError;
+import com.ariets.abercrombie.api.PromotionsApiClient;
 import com.ariets.abercrombie.model.AfPromotion;
+import com.ariets.abercrombie.utils.NetworkUtils;
 import com.ariets.abercrombie.views.IPromotionsView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -28,32 +25,42 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
+ * A "presenter" used to retrieve the Data. This will allow the UI to be fairly "dumb", only caring about whether or
+ * not the data has been fetched.
+ * <p/>
  * Created by aaron on 8/1/15.
  */
-public class PromotionsPresenter implements LoaderManager.LoaderCallbacks<Cursor> {
-    private static final int PROMOTIONS_LOADER = 1414;
+public class PromotionsPresenter {
 
     private IPromotionsView promotionsView;
-    private final AbercrombieApiClient apiClient;
-    private AfDatabaseHandler databaseHandler;
+    private final PromotionsApiClient apiClient;
 
     public PromotionsPresenter(IPromotionsView view, Context context) {
         promotionsView = view;
-        apiClient = new AbercrombieApiClient(context.getApplicationContext());
-        databaseHandler = new AfDatabaseHandler(context.getApplicationContext());
+        apiClient = new PromotionsApiClient(context.getApplicationContext());
     }
 
-    public void onResume() {
-    }
-
+    /**
+     * Loads a list of promotions. Will return the promotions in the
+     * {@link IPromotionsView#displayPromotions(ArrayList)} callback.
+     *
+     * @param context
+     */
     public void loadPromotions(Context context) {
         // First, load from the cache, if present:
         loadFromCache(context);
 
         // Now, load from the server.
-        fetchFromServer();
+        if (NetworkUtils.isConnected(context)) {
+            fetchFromServer();
+        } else if (promotionsView != null) {
+            promotionsView.onPromotionsError(ApiError.noNetworkConnectivityError());
+        }
     }
 
+    /**
+     * Loads the promotions from the internal SharedPreferences cache.
+     */
     private void loadFromCache(Context context) {
         Observable.just(PreferenceUtils.getJsonData(context)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -82,16 +89,18 @@ public class PromotionsPresenter implements LoaderManager.LoaderCallbacks<Cursor
                 });
     }
 
+    /**
+     * Loads the promotions from the API.
+     */
     private void fetchFromServer() {
         showProgress(true);
         apiClient.getPromotions()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .filter(new Func1<ArrayList<AfPromotion>, Boolean>() {
+                .map(new Func1<ArrayList<AfPromotion>, ArrayList<AfPromotion>>() {
                     @Override
-                    public Boolean call(ArrayList<AfPromotion> afPromotions) {
-                        // Only let successful calls through.
-                        return afPromotions != null;
+                    public ArrayList<AfPromotion> call(ArrayList<AfPromotion> afPromotions) {
+                        return afPromotions == null ? new ArrayList<AfPromotion>() : afPromotions;
                     }
                 })
                 .subscribe(new Subscriber<ArrayList<AfPromotion>>() {
@@ -124,21 +133,4 @@ public class PromotionsPresenter implements LoaderManager.LoaderCallbacks<Cursor
         }
     }
 
-    public void onPause() {
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
 }

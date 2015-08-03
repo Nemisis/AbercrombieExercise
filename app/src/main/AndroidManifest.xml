@@ -3,7 +3,10 @@
     package="com.ariets.abercrombie"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Used to connect to the internet to pull in the promotions. -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Used to check to see if the device has a network connection -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name="com.ariets.abercrombie.AbercrombieApplication"
@@ -22,11 +25,6 @@
         </activity>
 
         <activity android:name=".ui.AfPromotionDetailActivity"/>
-
-        <provider
-            android:name=".db.AfContentProvider"
-            android:authorities="com.ariets.abercrombie.provider"
-            android:exported="false"/>
     </application>
 
 </manifest>

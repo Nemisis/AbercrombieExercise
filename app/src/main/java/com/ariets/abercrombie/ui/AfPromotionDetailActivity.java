@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 
 import com.ariets.abercrombie.R;
 import com.ariets.abercrombie.model.AfPromotion;
@@ -13,7 +14,7 @@ import com.ariets.abercrombie.model.AfPromotion;
 /**
  * Created by aaron on 8/2/15.
  */
-public class AfPromotionDetailActivity extends AfBaseActivity {
+public class AfPromotionDetailActivity extends AppCompatActivity {
     public static final String EXTRA_PROMOTION = "promotion";
 
     public static void startActivity(@NonNull Activity activity, @NonNull AfPromotion promotion) {
