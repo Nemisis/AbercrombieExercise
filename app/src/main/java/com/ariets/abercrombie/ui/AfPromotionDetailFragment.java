@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
@@ -82,6 +83,8 @@ public class AfPromotionDetailFragment extends AfBaseFragment {
         View v = inflater.inflate(R.layout.promotions_detail_fragment, container, false);
         ButterKnife.bind(this, v);
         mTvFooter.setMovementMethod(LinkMovementMethod.getInstance());
+        ViewCompat.setTransitionName(mImageView, AfPromotionDetailActivity.TRANSITION_IMAGE_NAME);
+        ViewCompat.setTransitionName(mTvTitle, AfPromotionDetailActivity.TRANSITION_TEXTVIEW_NAME);
 
         setupView();
 

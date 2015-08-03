@@ -141,7 +141,7 @@ public class AfPromotionsFragment extends AfBaseFragment implements IPromotionsV
     @Override
     public void onItemClick(View view, int position) {
         AfPromotion promotion = mAdapter.getPromotion(position);
-        AfPromotionDetailActivity.startActivity(mActivity, promotion);
+        AfPromotionDetailActivity.startActivity(mActivity, promotion, view.findViewById(R.id.item_promotions_image));
     }
 
     class PromotionsAdapter extends RecyclerView.Adapter<PromotionsAdapter.ViewHolder> {
