@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "23.0.0 rc3"
+
+    defaultConfig {
+        applicationId "com.ariets.abercrombie"
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'com.android.support:design:22.2.1'
+
+    // Used for API Calls:
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    // Used for View inflation (and boilerplate reduction)
+    compile 'com.jakewharton:butterknife:7.0.1'
+    // Used for logging. Useful for keeping Logs out of release builds.
+    compile 'com.jakewharton.timber:timber:3.1.0'
+    // Used for loading remote images
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    // Used to help store data in the database
+    compile 'nl.qbusict:cupboard:2.1.2'
+    // Used for communicating from the Service to the
+    compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'io.reactivex:rxjava:1.0.13'
+    compile 'io.reactivex:rxandroid:0.25.0'
+
+    // Used for debuggin:
+    compile 'com.facebook.stetho:stetho:1.1.1'
+    compile 'com.facebook.stetho:stetho-okhttp:1.1.1'
+
+    // Used for testing:
+    androidTestCompile ('com.android.support.test.espresso:espresso-core:2.0'){
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
+    testCompile 'junit:junit:4.12'
+}

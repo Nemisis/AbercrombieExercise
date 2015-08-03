@@ -1,0 +1,25 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+
+        <item name="colorPrimary">@color/afColorPrimary</item>
+        <item name="colorPrimaryDark">@color/afColorPrimaryDark</item>
+
+    </style>
+
+    <style name="ThemeOverlay.Abercrombie" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:tint">@android:color/white</item>
+    </style>
+
+    <style name="TextAppearance.Abercrombie" parent="TextAppearance.AppCompat"/>
+
+    <style name="TextAppearance.Abercrombie.Title" parent="TextAppearance.AppCompat.Title"/>
+
+    <style name="TextAppearance.Abercrombie.Subtitle" parent="TextAppearance.AppCompat.Subhead">
+        <item name="android:textStyle">italic</item>
+    </style>
+
+</resources>
